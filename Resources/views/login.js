@@ -3,7 +3,7 @@ var api = require('lib/codebits_api');
 function createView(){
 
 	var emailInput = ui.textField({
-		properties: {top: 20, left: 0, right: 0, hintText: 'Email', borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED}
+		properties: {top: 20, left: 0, right: 0, hintText: 'Email', value: Ti.App.Properties.getString('email', ''), borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED}
 	}),
 
 	passwordInput = ui.textField({
@@ -21,6 +21,17 @@ function createView(){
 					onload: function(e){
 						// require and open the next window
 						alert(e);
+						var userChoice = require('views/userChoice');
+						var mainView = ui.win();
+
+						var nav = Titanium.UI.iPhone.createNavigationGroup({
+							window: userChoice.createView()
+						});
+
+						userChoice.nav_and_main({ nav: nav, main: mainView });
+
+						mainView.add(nav);
+						mainView.open({transition: Ti.UI.iPhone.AnimationStyle.FLIP_FROM_RIGHT});
 					},
 					onerror: function(e){
 						var errorMsg = e.error.id +' : '+e.error.msg;
@@ -40,7 +51,7 @@ function createView(){
 			ui.view({
 				properties: {layout: 'vertical', top: 10, left: 10, right: 10, height: Ti.UI.SIZE},
 				content: [
-					Ti.UI.createImageView({ top: 0, width: 153, height: 182, image: 'images/bot.png' }),
+					Ti.UI.createImageView({ top: 50, width: 153, height: 182, image: 'images/bot.png' }),
 					emailInput,
 					passwordInput,
 					loginButton

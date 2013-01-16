@@ -2,9 +2,9 @@ var baseURI = 'https://services.sapo.pt/Codebits/',
 
 cache = {
 	email: Ti.App.Properties.getString('email', null),
-	token: null
+	userInfo: null
 };
-if (cache.email) cache.token = Ti.App.Properties.getString(cache.email+'_token', null);
+if (cache.email) cache.userInfo = Ti.App.Properties.getString(cache.email+'_userInfo', null);
 
 
 function XHR(callbacks) {
@@ -52,41 +52,52 @@ function checkNetwork(callback) {
 
 var API = {
 
+	hasToken: function(){
+		return (cache.userInfo && cache.userInfo.token);
+	},
+
 	getToken: function(args, callback) {
-		cache.email = args.email;
-		Ti.App.Properties.setString('email', cache.email);
+		checkNetwork({
+			online: function(){
+				cache.email = args.email;
+				Ti.App.Properties.setString('email', cache.email);
 
-		var uri = baseURI + 'gettoken?user='+args.email+'&password='+args.password,
+				var uri = baseURI + 'gettoken?user='+args.email+'&password='+args.password,
 
-		xhr = new XHR({
-			onload: function(resp){
-				if (resp.json.error) {
-					if (callback && callback.onerror) callback.onerror( resp );
-					else Ti.App.fireEvent('api:getToken:error', resp);
-				}
-				else {
-					cache.token = resp.json.token;
-					Ti.App.Properties.setString(cache.email+'_token', cache.token);
+				xhr = new XHR({
+					onload: function(resp){
+						if (resp.json.error) {
+							if (callback && callback.onerror) callback.onerror( resp );
+							else Ti.App.fireEvent('api:getToken:error', resp);
+						}
+						else {
+							cache.userInfo = resp.json;
+							Ti.App.Properties.setString(cache.email+'_userInfo', cache.userInfo);
 
-					if (callback && callback.onload) callback.onload( resp.json );
-					else Ti.App.fireEvent('api:getToken:success', isFollowing);
-				}
+							if (callback && callback.onload) callback.onload( resp.json );
+							else Ti.App.fireEvent('api:getToken:success', isFollowing);
+						}
+					},
+					onerror: function(resp) {
+						if (callback && callback.onerror) callback.onerror( resp );
+						else Ti.App.fireEvent('api:getToken:error', resp);
+					},
+					noJson: false
+				});
+
+				Ti.API.debug('GET: '+uri);
+				
+				// Clears any cookies stored for the host
+				xhr.clearCookies(uri);
+				xhr.open('GET', uri, true);
+				// xhr.setRequestHeader('Content-Type', mimeType);
+				// xhr.setRequestHeader('Accept', mimeType);
+				xhr.send();
 			},
-			onerror: function(resp) {
-				if (callback && callback.onerror) callback.onerror( resp );
-				else Ti.App.fireEvent('api:getToken:error', resp);
-			},
-			noJson: false
+			offline: function(){
+				alert('You are offline. Network is required.');
+			}
 		});
-
-		Ti.API.debug('GET: '+uri);
-		
-		// Clears any cookies stored for the host
-		xhr.clearCookies(uri);
-		xhr.open('GET', uri, true);
-		// xhr.setRequestHeader('Content-Type', mimeType);
-		// xhr.setRequestHeader('Accept', mimeType);
-		xhr.send();
 	}
 
 };
