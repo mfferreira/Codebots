@@ -2,7 +2,8 @@ var baseURI = 'https://services.sapo.pt/Codebits/',
 
 cache = {
 	email: Ti.App.Properties.getString('email', null),
-	userInfo: null
+	userInfo: null,
+	botParts: null
 };
 if (cache.email) cache.userInfo = Ti.App.Properties.getString(cache.email+'_userInfo', null);
 
@@ -16,7 +17,7 @@ function XHR(callbacks) {
 		onload : function() {
 			Ti.API.log('api',"HTTP Code: " + this.status);
 			// Ti.API.log('api',"HTTP HEADER: " + this.getResponseHeader( 'Link' ));
-			Ti.API.log('api',"Received text: " + this.responseText);
+			// Ti.API.log('api',"Received text: " + this.responseText);
 			// Ti.API.log('api',"Received Data: " + this.responseData);
 			var responseParsed = (callbacks.noJson? '': JSON.parse(this.responseText));
 			if (callbacks.onload) {
@@ -100,12 +101,14 @@ var API = {
 		});
 	},
 
-	getBotParts: function(parts, callback) {
+	getBotParts: function(callback) {
+		if (cache.botParts) return cache.botParts;
 		checkNetwork({
 			online: function(){
 				var uri = baseURI + 'botparts',
 				xhr = new XHR({
 					onload: function(resp){
+						cache.botParts = resp.json;
 						if (callback && callback.onload) callback.onload( resp.json );
 						else Ti.App.fireEvent('api:botMake:success', isFollowing);
 					},

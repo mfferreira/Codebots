@@ -20,7 +20,7 @@ function createView(){
 				}, {
 					onload: function(e){
 						// require and open the next window
-						alert(e);
+						// alert(e);
 						var userChoice = require('views/userChoice');
 						var mainView = ui.win();
 
