@@ -98,6 +98,34 @@ var API = {
 				alert('You are offline. Network is required.');
 			}
 		});
+	},
+
+	getBotParts: function(parts, callback) {
+		checkNetwork({
+			online: function(){
+				var uri = baseURI + 'botparts',
+				xhr = new XHR({
+					onload: function(resp){
+						if (callback && callback.onload) callback.onload( resp.json );
+						else Ti.App.fireEvent('api:botMake:success', isFollowing);
+					},
+					onerror: function(resp) {
+						if (callback && callback.onerror) callback.onerror( resp );
+						else Ti.App.fireEvent('api:botMake:error', resp);
+					},
+					noJson: false
+				});
+
+				Ti.API.debug('GET: '+uri);
+				xhr.open('GET', uri, true);
+				xhr.send();
+			}
+		});
+	},
+
+	botMake: function(parts) {
+		parts = parts || {body:'01',bgcolor:'01',grad:'01',eyes:'01',mouth:'01',legs:'01',head:'01',arms:'01',balloon:'Change me!'};
+		return baseURI + 'botmake/'+[parts.body,parts.bgcolor,parts.grad,parts.eyes,parts.mouth,parts.legs,parts.head,parts.arms,encodeURIComponent(parts.balloon)].join(',');
 	}
 
 };

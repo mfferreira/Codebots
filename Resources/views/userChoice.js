@@ -8,6 +8,8 @@ exports.createView = function(){
 		events: [
 			['click', function(e){
 				Ti.API.debug('Tapped Bot Builder');
+				var botBuilder = require('views/botBuilder').createView(nav);
+				nav.open(botBuilder);
 			}]
 		]
 	}),
