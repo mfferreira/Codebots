@@ -105,7 +105,7 @@ function TiUber() {
     if (events) {
       for (i=events.length; i--;){
         var event_ = events[i];
-        obj.addEventListener(event_[0], event_[1]);
+        picker.addEventListener(event_[0], event_[1]);
       }
     }
     return picker;

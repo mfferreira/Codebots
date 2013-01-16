@@ -6,6 +6,7 @@ exports.createView = function(navView){
 	nav = navView;
 
 	var defaultBot = api.botMake(),
+		thisBotParts = {body:'01',bgcolor:'01',grad:'01',eyes:'01',mouth:'01',legs:'01',head:'01',arms:'01'},
 
 	botImage = ui.image({
 		properties: {width: 320, height: 320, top: 0, image: defaultBot},
@@ -38,7 +39,6 @@ exports.createView = function(navView){
 					column = Ti.UI.createPickerColumn();
 					var thisPart = parts[part];
 
-					try {
 					for(var i=0, j=thisPart.length; i<j; i++){
 						var row = Ti.UI.createPickerRow({
 							partValue: {part: part, id: thisPart[i].id}
@@ -46,7 +46,6 @@ exports.createView = function(navView){
 						row.add(Ti.UI.createImageView({image: 'https://codebits.eu'+thisPart[i].picker}));
 						column.addRow(row);
 					}
-					} catch(err) {Ti.API.error(err);}
 
 					columns.push(column);
 				}
@@ -54,13 +53,21 @@ exports.createView = function(navView){
 
 			Ti.API.debug('Adding picker to the view.');
 
+			try {
 			var picker = ui.picker({
 				columns: columns,
 				selectionIndicator: true,
 				useSpinner: true, // required in order to use multi-column pickers with Android
-				top: 320, bottom: 0
-			});
+				top: 330, bottom: 0
+			}, [
+				['change', function(e){
+					var row = e.row;
+					thisBotParts[row.partValue.part] = row.partValue.id;
+					botImage.setImage(api.botMake(thisBotParts));
+				}]
+			]);
 			self.add(picker);
+			} catch(err) {Ti.API.error(err);}
 		},
 		onerror: function(e){
 			alert(e);
