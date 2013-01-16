@@ -11,7 +11,24 @@ exports.createView = function(navView){
 	botImage = ui.image({
 		properties: {width: 320, height: 320, top: 0, image: defaultBot},
 		events: [['click', function(e){
-
+			var dialog = Ti.UI.createAlertDialog({
+				cancel: 1,
+				buttonNames: ['Set', 'Cancel'],
+				message: 'Say something cool:',
+				title: 'Balloon Message',
+				style: Ti.UI.iPhone.AlertDialogStyle.PLAIN_TEXT_INPUT
+			});
+			dialog.addEventListener('click', function(e){
+				if (e.index === e.source.cancel){
+					Ti.API.info('The cancel button was clicked');
+				}
+				else {
+					thisBotParts.balloon = e.text;
+					botImage.setImage(api.botMake(thisBotParts));
+				}
+				
+			});
+			dialog.show();
 		}]]
 	});
 
