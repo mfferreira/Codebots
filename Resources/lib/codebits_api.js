@@ -129,6 +129,78 @@ var API = {
 	botMake: function(parts) {
 		parts = parts || {body:'01',bgcolor:'01',grad:'01',eyes:'01',mouth:'01',legs:'01',head:'01',arms:'01',balloon:'Change me!'};
 		return baseURI + 'botmake/'+[parts.body,parts.bgcolor,parts.grad,parts.eyes,parts.mouth,parts.legs,parts.head,parts.arms,encodeURIComponent(parts.balloon)].join(',');
+	},
+
+	getUsers: function(callback){
+		checkNetwork({
+			online: function(){
+				var uri = baseURI + 'users?token='+cache.userInfo.token,
+
+				xhr = new XHR({
+					onload: function(resp){
+						if (resp.json.error) {
+							if (callback && callback.onerror) callback.onerror( resp );
+							else Ti.App.fireEvent('api:getUsers:error', resp);
+						}
+						else {
+							if (callback && callback.onload) callback.onload( resp.json );
+							else Ti.App.fireEvent('api:getUsers:success', isFollowing);
+						}
+					},
+					onerror: function(resp) {
+						if (callback && callback.onerror) callback.onerror( resp );
+						else Ti.App.fireEvent('api:getUsers:error', resp);
+					},
+					noJson: false
+				});
+
+				Ti.API.debug('GET: '+uri);
+				
+				// Clears any cookies stored for the host
+				xhr.clearCookies(uri);
+				xhr.open('GET', uri, true);
+				xhr.send();
+			},
+			offline: function(){
+				alert('You are offline. Network is required.');
+			}
+		});
+	},
+
+	getUserInfo: function(uid, callback){
+		checkNetwork({
+			online: function(){
+				var uri = baseURI + 'user/'+uid+'?token='+cache.userInfo.token,
+
+				xhr = new XHR({
+					onload: function(resp){
+						if (resp.json.error) {
+							if (callback && callback.onerror) callback.onerror( resp );
+							else Ti.App.fireEvent('api:getUsers:error', resp);
+						}
+						else {
+							if (callback && callback.onload) callback.onload( resp.json );
+							else Ti.App.fireEvent('api:getUsers:success', isFollowing);
+						}
+					},
+					onerror: function(resp) {
+						if (callback && callback.onerror) callback.onerror( resp );
+						else Ti.App.fireEvent('api:getUsers:error', resp);
+					},
+					noJson: false
+				});
+
+				Ti.API.debug('GET: '+uri);
+				
+				// Clears any cookies stored for the host
+				xhr.clearCookies(uri);
+				xhr.open('GET', uri, true);
+				xhr.send();
+			},
+			offline: function(){
+				alert('You are offline. Network is required.');
+			}
+		});
 	}
 
 };

@@ -21,16 +21,7 @@ function createView(){
 					onload: function(e){
 						// require and open the next window
 						// alert(e);
-						var userChoice = require('views/userChoice');
-						var mainView = ui.win();
-
-						var nav = Titanium.UI.iPhone.createNavigationGroup({
-							window: userChoice.createView()
-						});
-
-						userChoice.nav_and_main({ nav: nav, main: mainView });
-
-						mainView.add(nav);
+						var mainView = require('views/mainView');
 						mainView.open({transition: Ti.UI.iPhone.AnimationStyle.FLIP_FROM_RIGHT});
 					},
 					onerror: function(e){

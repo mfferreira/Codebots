@@ -1,10 +1,8 @@
 var ui = require('lib/ui_sugar'),
-	api = require('lib/codebits_api'),
-	nav;
+	api = require('lib/codebits_api');
 
-exports.createView = function(navView){
-	nav = navView;
 
+exports.createView = function(){
 	var defaultBot = api.botMake(),
 		thisBotParts = {body:'01',bgcolor:'01',grad:'01',eyes:'01',mouth:'01',legs:'01',head:'01',arms:'01'},
 
