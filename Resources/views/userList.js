@@ -54,7 +54,7 @@ function createView(){
 							shadowColor: '#aaa',
 							shadowOffset: {x:1, y:1},
 							textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
-							left: 36, top: 2,
+							left: 41, top: 2,
 							width: Ti.UI.SIZE, height: Ti.UI.SIZE
 						}),
 						ui.label({
@@ -62,7 +62,7 @@ function createView(){
 							color: '#444',
 							font: { fontSize: 13 },
 							textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
-							left: 36, bottom: 2,
+							left: 41, bottom: 2,
 							width: Ti.UI.SIZE, height: Ti.UI.SIZE
 						})
 					]
