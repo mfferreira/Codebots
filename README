@@ -1,18 +1,8 @@
-Welcome to your Appcelerator Titanium Mobile Project
+Codebots features:
+- Generates Codebits bots
+- Lists current year event accepted users
 
-This is a blank project.  Start by editing your application's app.js to 
-make your first mobile project using Titanium.
+This is just a proof-of-concept and it's only ment to run on iPhone.
+Building for other iOS devices or Android might not work as expected.
 
-
-
-----------------------------------
-Stuff our legal folk make us say:
-
-Appcelerator, Appcelerator Titanium and associated marks and logos are 
-trademarks of Appcelerator, Inc. 
-
-Titanium is Copyright (c) 2008-2012 by Appcelerator, Inc. All Rights Reserved.
-
-Titanium is licensed under the Apache Public License (Version 2). Please
-see the LICENSE file for the full license.
-
+App uses https://codebits.eu/s/api to generate its content.
